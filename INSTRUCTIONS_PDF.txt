@@ -1,0 +1,141 @@
+=================================================================================
+                     INSTRUCTIONS POUR AJOUTER LA GÉNÉRATION PDF
+=================================================================================
+
+📦 FICHIERS FOURNIS :
+--------------------
+1. generer_pdf.py          - Script Python pour générer les PDFs
+2. nouvelles_fonctions_pdf.c - Code C à ajouter dans ebank.c
+3. test_stats.pdf          - Exemple de PDF de statistiques
+4. test_operations.pdf     - Exemple de PDF de liste d'opérations
+
+🔧 ÉTAPE 1 : INSTALLER PYTHON ET REPORTLAB
+------------------------------------------
+Sur Windows avec Code::Blocks, tu dois avoir Python installé.
+
+1. Télécharge Python depuis : https://www.python.org/downloads/
+2. Installe-le en cochant "Add Python to PATH"
+3. Ouvre un terminal (cmd) et tape :
+   pip install reportlab
+
+🔧 ÉTAPE 2 : COPIER LE SCRIPT PYTHON
+------------------------------------
+1. Copie le fichier generer_pdf.py dans le dossier de ton projet ebank
+   (le même dossier où se trouvent main.c, ebank.c, etc.)
+
+🔧 ÉTAPE 3 : AJOUTER LES FONCTIONS DANS ebank.h
+-----------------------------------------------
+Dans ebank.h, ajoute ces deux déclarations à la fin :
+
+void listerOperationsParComptePDF();
+void nombreOperationsParComptePDF();
+
+🔧 ÉTAPE 4 : AJOUTER LES FONCTIONS DANS ebank.c
+-----------------------------------------------
+1. Ouvre nouvelles_fonctions_pdf.c
+2. Copie TOUT le contenu
+3. Colle-le à la FIN du fichier ebank.c (avant le dernier })
+
+🔧 ÉTAPE 5 : MODIFIER main.c
+----------------------------
+Dans main.c, modifie les options 4 et 6 :
+
+REMPLACE :
+    case 4:
+        fflush(stdin);
+        printf("Numero de compte pour depot : ");
+        fgets(numero, 20, stdin);
+        // ... reste du code depot ...
+
+PAR :
+    case 4:
+        listerOperationsParComptePDF();
+        PAUSE
+        CLEAR
+        break;
+
+REMPLACE :
+    case 6:
+        puts("Liste des operations");
+        listerOperations();
+        PAUSE
+        CLEAR
+        break;
+
+PAR :
+    case 6:
+        nombreOperationsParComptePDF();
+        PAUSE
+        CLEAR
+        break;
+
+ATTENTION : Les anciennes options 4 (Dépôt) et 6 (Liste opérations) deviennent 
+maintenant des fonctions de génération PDF.
+
+🔧 ÉTAPE 6 : RÉORGANISER LE MENU
+--------------------------------
+Ton menu devrait maintenant être :
+
+1.  Creation compte (Nouveau/Existant)
+2.  Liste de tous les comptes
+3.  Recherche compte par numero
+4.  Liste operations par compte (PDF)        ← MODIFIÉ
+5.  Retrait
+6.  Statistiques operations (PDF)            ← MODIFIÉ
+7.  Nombre total de comptes
+8.  Nombre total de clients
+9.  Liste des comptes par client
+10. Depot                                     ← DÉPLACÉ
+11. Liste de toutes les operations           ← DÉPLACÉ
+12. Nombre d'operations par compte
+13. Nombre d'operations par type
+14. Fermer un compte
+15. Quitter
+
+Ou tu peux simplement AJOUTER deux nouvelles options :
+
+16. Liste operations par compte (PDF)
+17. Statistiques operations (PDF)
+
+🧪 ÉTAPE 7 : TESTER
+------------------
+1. Recompile le projet (Build → Rebuild)
+2. Lance le programme
+3. Crée un compte et fais quelques opérations (dépôt/retrait)
+4. Teste l'option 4 ou 16 (Liste opérations PDF)
+5. Teste l'option 6 ou 17 (Statistiques PDF)
+6. Les fichiers PDF seront créés dans le dossier du projet
+
+✅ VÉRIFICATION
+--------------
+Si tout fonctionne, tu devrais voir :
+- "Generation du PDF en cours..."
+- "=== PDF GENERE AVEC SUCCES ==="
+- "Fichier : operations_CPT-001.pdf"
+
+Les PDFs seront dans le dossier du projet avec des noms comme :
+- operations_CPT-001.pdf
+- stats_CPT-001.pdf
+
+📝 POUR TA PRÉSENTATION
+----------------------
+Tu peux dire :
+"Le système génère automatiquement des rapports PDF pour :
+ - La liste détaillée des opérations d'un compte
+ - Les statistiques avec répartition dépôts/retraits
+ Les PDFs sont formatés professionnellement avec en-têtes, 
+ tableaux et totaux."
+
+🆘 EN CAS DE PROBLÈME
+--------------------
+Si tu as l'erreur "python: command not found" :
+→ Assure-toi que Python est installé et dans le PATH
+
+Si tu as l'erreur "No module named 'reportlab'" :
+→ Exécute : pip install reportlab
+
+Si le PDF n'est pas créé :
+→ Vérifie que generer_pdf.py est dans le bon dossier
+→ Vérifie que le compte existe avant de générer le PDF
+
+=================================================================================
